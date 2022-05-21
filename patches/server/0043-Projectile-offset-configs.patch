@@ -1,0 +1,66 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Minh Nguyen <minhh2792.work@gmail.com>
+Date: Thu, 12 May 2022 03:31:09 +0000
+Subject: [PATCH] Projectile offset configs
+
+
+diff --git a/src/main/java/com/destroystokyo/paper/PaperConfig.java b/src/main/java/com/destroystokyo/paper/PaperConfig.java
+index 539ae6aeb5e92f55b981d9cf3f11bf2f1816852f..372c0faa802562e83b402858602c67825f7ffcb9 100644
+--- a/src/main/java/com/destroystokyo/paper/PaperConfig.java
++++ b/src/main/java/com/destroystokyo/paper/PaperConfig.java
+@@ -334,4 +334,16 @@ public class PaperConfig {
+             maxBookTotalSizeMultiplier = 0.98D;
+         }
+     }
++
++    public static double bowProjectileOffset = 1.0D;
++    public static double enderPearlProjectileOffset = 1.0D;
++    public static double eggProjectileOffset = 1.0D;
++    public static double snowballProjectileOffset = 1.0D;
++    private static void projectileOffset() {
++        bowProjectileOffset = getDouble("projectile-offset.bow", bowProjectileOffset);
++        enderPearlProjectileOffset = getDouble("projectile-offset.ender-pearl", enderPearlProjectileOffset);
++        eggProjectileOffset = getDouble("projectile-offset.egg", eggProjectileOffset);
++        snowballProjectileOffset = getDouble("projectile-offset.snowball", snowballProjectileOffset);
++    }
++
+ }
+diff --git a/src/main/java/net/minecraft/server/ItemBow.java b/src/main/java/net/minecraft/server/ItemBow.java
+index 44e7be58e134a6d66c464010c13d4e73b548c160..284d02a468de14611a79623a687aeedd17fac523 100644
+--- a/src/main/java/net/minecraft/server/ItemBow.java
++++ b/src/main/java/net/minecraft/server/ItemBow.java
+@@ -67,7 +67,7 @@ public class ItemBow extends Item {
+                         ItemArrow itemarrow = (ItemArrow) ((ItemArrow) (itemstack1.getItem() instanceof ItemArrow ? itemstack1.getItem() : Items.ARROW));
+                         EntityArrow entityarrow = itemarrow.a(world, itemstack1, (EntityLiving) entityhuman);
+ 
+-                        entityarrow.a(entityhuman, entityhuman.pitch, entityhuman.yaw, 0.0F, f * 3.0F, 1.0F);
++                        entityarrow.a(entityhuman, entityhuman.pitch, entityhuman.yaw, 0.0F, f * 3.0F, (float) com.destroystokyo.paper.PaperConfig.bowProjectileOffset);
+                         if (f == 1.0F) {
+                             entityarrow.setCritical(true);
+                         }
+diff --git a/src/main/java/net/minecraft/server/ItemEnderPearl.java b/src/main/java/net/minecraft/server/ItemEnderPearl.java
+index a0bf985da7d27089047f9073f8364947cd4f09d9..3bea047f3ce145270d60badab1dd54ba77c20b75 100644
+--- a/src/main/java/net/minecraft/server/ItemEnderPearl.java
++++ b/src/main/java/net/minecraft/server/ItemEnderPearl.java
+@@ -14,7 +14,7 @@ public class ItemEnderPearl extends Item {
+         if (!world.isClientSide) {
+             EntityEnderPearl entityenderpearl = new EntityEnderPearl(world, entityhuman);
+ 
+-            entityenderpearl.a(entityhuman, entityhuman.pitch, entityhuman.yaw, 0.0F, 1.5F, 1.0F);
++            entityenderpearl.a(entityhuman, entityhuman.pitch, entityhuman.yaw, 0.0F, 1.5F, (float) com.destroystokyo.paper.PaperConfig.enderPearlProjectileOffset);
+             if (!world.addEntity(entityenderpearl)) {
+                 if (entityhuman instanceof EntityPlayer) {
+                     ((EntityPlayer) entityhuman).getBukkitEntity().updateInventory();
+diff --git a/src/main/java/net/minecraft/server/ItemSnowball.java b/src/main/java/net/minecraft/server/ItemSnowball.java
+index 2e73c93aa0091d91c148efd1f034421d21730855..dce34fe42c139fc8d7a5cf3401f145874bd05ef7 100644
+--- a/src/main/java/net/minecraft/server/ItemSnowball.java
++++ b/src/main/java/net/minecraft/server/ItemSnowball.java
+@@ -21,7 +21,7 @@ public class ItemSnowball extends Item {
+         if (!world.isClientSide) {
+             EntitySnowball entitysnowball = new EntitySnowball(world, entityhuman);
+ 
+-            entitysnowball.a(entityhuman, entityhuman.pitch, entityhuman.yaw, 0.0F, 1.5F, 1.0F);
++            entitysnowball.a(entityhuman, entityhuman.pitch, entityhuman.yaw, 0.0F, 1.5F, (float) com.destroystokyo.paper.PaperConfig.snowballProjectileOffset);
+             if (world.addEntity(entitysnowball)) {
+                 if (!entityhuman.abilities.canInstantlyBuild) {
+                     itemstack.subtract(1);

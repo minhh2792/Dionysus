@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.1.15] - 2022-05-21
+
+### Added
+* Projectiles offset configs
+
 ## [0.1.14] - 2022-02-12
 
 ### Fixed
